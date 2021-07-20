@@ -1,12 +1,24 @@
+import { ChakraProvider } from '@chakra-ui/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { ThemeProvider } from 'styled-components';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import * as theme from "config/themes";
+import { RecoilRoot } from 'recoil';
+import { ModalContextProvider } from 'context/modalContext';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ChakraProvider>
+      <ThemeProvider theme={theme}>
+        <ModalContextProvider>
+          <RecoilRoot>
+            <App />
+          </RecoilRoot>
+        </ModalContextProvider>
+      </ThemeProvider>
+    </ChakraProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,0 +1,6 @@
+export enum ATOM_KEYS {
+  TODO_ATOM = "TODO_ATOM",
+  IS_TODO_LIST_EMPTY = "IS_TODO_LIST_EMPTY",
+  ADD_TODO = "ADD_TODO"
+}
+

@@ -1,12 +1,12 @@
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { Button, Checkbox, FormControl, FormLabel, Input } from '@chakra-ui/react'
+import { Button, Checkbox, Fade, FormControl, FormLabel, Input, ScaleFade, SlideFade, useDisclosure } from '@chakra-ui/react'
 import todoState from 'atoms/todoAtom'
 import ModalComponent from 'components/Modals/ModalComponent'
 import ModalDeleteTodo from 'components/Modals/Todo/DeleteTodo'
 import ModalUpdateTodo from 'components/Modals/Todo/UpdateTodo'
 import { englishVermillion, spaceCadet } from 'config/variables'
 import { useModal } from 'context/modalContext'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useRecoilState } from 'recoil'
 import styled from 'styled-components'
@@ -50,6 +50,11 @@ const Todo = ({ todo }: Props) => {
   const index = todoList.findIndex((listItem) => listItem === todo);
 
   const { showModal, hideModal } = useModal();
+  const { isOpen, onToggle } = useDisclosure()
+
+  useEffect(() => {
+    onToggle()
+  }, [])
 
   // Mutations
   const updateTodo = (todoDescription: string): void => {
@@ -76,21 +81,22 @@ const Todo = ({ todo }: Props) => {
 
   return (
     <>
-      <StyledTodo>
-        <Checkbox size="md" isChecked={todo.done} onChange={(e) => toggleTodoCompletion()}>
-          {todo.description}
-        </Checkbox>
+      <ScaleFade initialScale={0.8} in={isOpen} >
+        <StyledTodo>
+          <Checkbox size="md" isChecked={todo.done} onChange={(e) => toggleTodoCompletion()}>
+            {todo.description}
+          </Checkbox>
 
-        <div className="icons">
-          <Button onClick={() => showModal("ModalUpdateTodo")}>
-            <EditIcon color={spaceCadet} onClick={() => showModal("ModalUpdateTodo")} />
-          </Button>
-          <Button onClick={() => showModal("ModalDeleteTodo")}>
-            <DeleteIcon color={englishVermillion} />
-          </Button>
-        </div>
-        {/* {todo.deadline.format("dd:mm:yyyy")} */}
-      </StyledTodo>
+          <div className="icons">
+            <Button onClick={() => showModal("ModalUpdateTodo")}>
+              <EditIcon color={spaceCadet} onClick={() => showModal("ModalUpdateTodo")} />
+            </Button>
+            <Button onClick={() => showModal("ModalDeleteTodo")}>
+              <DeleteIcon color={englishVermillion} />
+            </Button>
+          </div>
+        </StyledTodo>
+      </ScaleFade>
 
       {/* Modals */}
       <ModalUpdateTodo todo={todo} handleUpdate={(description) => updateTodo(description)} handleClose={() => hideModal("ModalUpdateTodo")} />
